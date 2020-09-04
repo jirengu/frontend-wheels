@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="ruoyu@jirengu">
+  <title>TinyPromise test</title>
+</head>
+<body>
+  
+  <script src="tiny-promise.js"></script>
+  <script>
+    new TinyPromise((resolve, reject) => {
+      let [val, time] = [Math.random(), Math.random() * 1000]
+      setTimeout(() => {
+        val>0.2?resolve(val):reject(val)
+      }, time)
+    }).then(
+      val => console.log('TinyPromise test:' , val), 
+      err => console.error('TinyPromise test:'+ err)
+    )
+
+    const getPList = () => {
+      let arrP = []
+      for(let i=0; i< 10; i++) {
+        arrP[i] = new TinyPromise((resolve, reject) => {
+          let [v, t] = [Math.random(), Math.random() * 1000]
+          setTimeout(() => {
+            v > 0.1 ? resolve(v) : reject(v)
+          }, t)
+        })
+      }
+      return arrP
+    }
+
+    TinyPromise.all(getPList()).then(
+      data => console.log('TinyPromise.all test:', data),
+      err => console.error('TinyPromise.all test:' + err)
+    )
+
+
+    TinyPromise.race(getPList()).then(
+      data => console.log('TinyPromise.race test:', data), 
+      err => console.error('TinyPromise.race test:' + err)
+    )
+  </script>
+</body>
+</html>

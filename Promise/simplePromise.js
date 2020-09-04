@@ -1,1 +1,0 @@
-simplepromise.js
